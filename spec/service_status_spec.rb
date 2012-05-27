@@ -2,13 +2,17 @@ require 'rspec'
 require 'app/service_status'
 
 describe ServiceStatus do
-  it "is available when status is ok" do
-    status = ServiceStatus.new 'ok'
-    status.available?.should be_true
+  context "when status is ok" do
+    it "service is available" do
+      status = ServiceStatus.new 'ok'
+      status.available?.should be_true
+    end
   end
 
-  it "is not available when status is down" do
-    status = ServiceStatus.new 'down'
-    status.available?.should be_false
+  context "when status is down" do
+    it "service is not available" do
+      status = ServiceStatus.new 'down'
+      status.available?.should be_false
+    end
   end
 end
