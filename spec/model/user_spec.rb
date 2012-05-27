@@ -18,23 +18,38 @@ describe User do
   end
 
   describe "attributes" do
-    it "has the expected attributes" do
-      user = User.new
-      user.should respond_to :name
-      user.should respond_to :email
-      user.should respond_to :admin
+    let(:user) { User.new email: email, name: name }
+    let(:name) { 'user name' }
+    let(:email) { 'a@b.com' }
+
+    it { should respond_to :name }
+    it { should respond_to :email }
+    it { should respond_to :admin }
+
+    context "without a name" do
+      let(:name) { '' }
+      let!(:valid) { user.valid? }
+
+      it "is not valid" do
+        valid.should be_false
+      end
+
+      it "includes an error for blank name" do
+        user.errors[:name].should_not be_empty
+      end
     end
 
-    it "requires name" do
-      user = User.new email: 'a@b.com'
-      user.valid?.should be_false
-      user.errors[:name].should_not be_empty
-    end
+    context "without an email" do
+      let(:email) { '' }
+      let!(:valid) { user.valid? }
 
-    it "requires email" do
-      user = User.new name: 'foo'
-      user.valid?.should be_false
-      user.errors[:email].should_not be_empty
+      it "is not valid" do
+        valid.should be_false
+      end
+
+      it "includes an error for blank email" do
+        user.errors[:email].should_not be_empty
+      end
     end
   end
 end
